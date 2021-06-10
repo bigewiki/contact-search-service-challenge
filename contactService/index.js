@@ -63,14 +63,23 @@ export default class {
     // Setting up regex expression using query
     const regex = new RegExp(query, "i");
 
-    // TODO: only search against name (first, last, nickname), phone number, email, or role
-
     // Filter contactCache for any matches
     return (
       this.contactCache
-        .filter((contact) =>
-          Object.values(contact).some((val) => regex.test(val))
-        )
+        .filter((contact) => {
+          // Build the search index
+          const index = [
+            contact.firstName,
+            contact.lastName,
+            contact.nickName,
+            contact.primaryPhoneNumber,
+            contact.secondaryPhoneNumber,
+            contact.primaryEmail,
+            contact.secondaryEmail,
+          ];
+
+          return index.some((val) => regex.test(val));
+        })
         // format the output
         .map((contact) => this.formatContact(contact))
     );
