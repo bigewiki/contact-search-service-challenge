@@ -12,9 +12,18 @@ export default class {
     this.contactCache = [];
 
     // Listening for new contacts and push those to the cache
-    updates.on("add", async (id) =>
-      this.contactCache.push(await service.getById(id))
-    );
+    updates.on("add", async (id) => {
+      const res = await service.getById(id);
+
+      this.contactCache.push({
+        ...res,
+        // Sanitizing phone numbers on contact
+        primaryPhoneNumber: this.sanitizePhoneNumber(res.primaryPhoneNumber),
+        secondaryPhoneNumber: this.sanitizePhoneNumber(
+          res.secondaryPhoneNumber
+        ),
+      });
+    });
 
     // Listening for changes and update the cache
     updates.on("change", (id, key, value) => {
@@ -29,11 +38,11 @@ export default class {
     });
   }
 
-  formatPhoneNumber(input) {
-    // Sanitize the input by removing non digits and remove country code
-    input = input.replace(/[^\d]/g, "").slice(-10);
+  sanitizePhoneNumber(input) {
+    return input.replace(/[^\d]/g, "").slice(-10);
+  }
 
-    // Return per desired format
+  formatPhoneNumber(input) {
     return `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
   }
 
