@@ -120,52 +120,52 @@ describe("Contact Service", () => {
         });
       });
 
-      //   it("should return multiple matching contacts", async () => {
-      //     const contact1 = createContact({
-      //       firstName: "First",
-      //       lastName: "Last",
-      //       primaryPhoneNumber: "314-555-0000",
-      //     });
-      //     const contact2 = createContact({
-      //       firstName: "First",
-      //       lastName: "Other",
-      //       primaryPhoneNumber: "314-555-0001",
-      //     });
-      //     //This contact should not be returned by the search
-      //     createContact({
-      //       firstName: "John",
-      //       lastName: "Doe",
-      //       primaryPhoneNumber: "303-123-4567",
-      //     });
+      it("should return multiple matching contacts", async () => {
+        const contact1 = createContact({
+          firstName: "First",
+          lastName: "Last",
+          primaryPhoneNumber: "314-555-0000",
+        });
+        const contact2 = createContact({
+          firstName: "First",
+          lastName: "Other",
+          primaryPhoneNumber: "314-555-0001",
+        });
+        //This contact should not be returned by the search
+        createContact({
+          firstName: "John",
+          lastName: "Doe",
+          primaryPhoneNumber: "303-123-4567",
+        });
 
-      //     await flush();
-      //     const results = service.search("First");
+        await flush();
+        const results = service.search("First");
 
-      //     expect(results.length).to.equal(2);
-      //     expect(results.map((res) => res.id)).includes(contact1.id);
-      //     expect(results.map((res) => res.id)).includes(contact2.id);
-      //   });
+        expect(results.length).to.equal(2);
+        expect(results.map((res) => res.id)).includes(contact1.id);
+        expect(results.map((res) => res.id)).includes(contact2.id);
+      });
 
-      //   it("should map phone numbers with different incoming formats", async () => {
-      //     const contact = createContact({
-      //       firstName: "First",
-      //       lastName: "Last",
-      //       primaryPhoneNumber: "314-555-0001",
-      //       secondaryPhoneNumber: "+13145551234",
-      //     });
+      it("should map phone numbers with different incoming formats", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          primaryPhoneNumber: "314-555-0001",
+          secondaryPhoneNumber: "+13145551234",
+        });
 
-      //     await flush();
-      //     const results = service.search("First");
+        await flush();
+        const results = service.search("First");
 
-      //     expect(results.length).to.equal(1);
-      //     expect(results[0]).to.deep.equal({
-      //       name: "First Last",
-      //       phones: ["(314) 555-0001", "(314) 555-1234"],
-      //       email: "",
-      //       address: "",
-      //       id: contact.id,
-      //     });
-      //   });
+        expect(results.length).to.equal(1);
+        expect(results[0]).to.deep.equal({
+          name: "First Last",
+          phones: ["(314) 555-0001", "(314) 555-1234"],
+          email: "",
+          address: "",
+          id: contact.id,
+        });
+      });
 
       //   it("should map the contact name to nickName lastName if applicable", async () => {
       //     const contact = createContact({

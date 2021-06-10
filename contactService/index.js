@@ -34,6 +34,9 @@ export default class {
       primaryEmail,
       primaryPhoneNumber,
       secondaryPhoneNumber,
+      addressLine1,
+      addressLine2,
+      addressLine3,
     } = await this.service.getById(id);
 
     // Return desired format
@@ -44,6 +47,9 @@ export default class {
         .filter((e) => e !== "")
         .map((e) => this.formatPhoneNumber(e)),
       email: primaryEmail,
+      address: [addressLine1, addressLine2, addressLine3]
+        .filter((e) => e !== "")
+        .join(", "),
     };
   }
 
