@@ -40,8 +40,17 @@ export default class {
   contactCache = [];
 
   search(query) {
-    console.log(this.contactCache);
+    // Setting up regex expression using query
+    const regex = new RegExp(query, "i");
 
-    return [];
+    // Mapping over the contactCache to find matches
+    const results = [];
+    this.contactCache.map((contact) => {
+      Object.values(contact).map((val) => {
+        regex.test(val) && results.push(contact);
+      });
+    });
+
+    return results;
   }
 }
