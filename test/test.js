@@ -167,27 +167,27 @@ describe("Contact Service", () => {
         });
       });
 
-      //   it("should map the contact name to nickName lastName if applicable", async () => {
-      //     const contact = createContact({
-      //       firstName: "First",
-      //       lastName: "Last",
-      //       nickName: "Joe",
-      //       primaryPhoneNumber: "314-555-0000",
-      //       primaryEmail: "joe.last@mail.com",
-      //     });
+      it("should map the contact name to nickName lastName if applicable", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          nickName: "Joe",
+          primaryPhoneNumber: "314-555-0000",
+          primaryEmail: "joe.last@mail.com",
+        });
 
-      //     await flush();
-      //     const results = service.search("First");
+        await flush();
+        const results = service.search("First");
 
-      //     expect(results.length).to.equal(1);
-      //     expect(results[0]).to.deep.equal({
-      //       name: "Joe Last",
-      //       phones: ["(314) 555-0000"],
-      //       email: "joe.last@mail.com",
-      //       address: "",
-      //       id: contact.id,
-      //     });
-      //   });
+        expect(results.length).to.equal(1);
+        expect(results[0]).to.deep.equal({
+          name: "Joe Last",
+          phones: ["(314) 555-0000"],
+          email: "joe.last@mail.com",
+          address: "",
+          id: contact.id,
+        });
+      });
     });
 
     // describe('change event', () => {

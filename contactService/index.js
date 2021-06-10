@@ -9,7 +9,7 @@ export default class {
     // Moving service to a method
     this.service = service;
 
-    // Listening for new contacts and pushing those to the cache
+    // Listening for new contacts and push those to the cache
     updates.on("add", async (id) =>
       this.contactCache.push(await this.retrieveNewContact(id))
     );
@@ -18,8 +18,8 @@ export default class {
   contactCache = [];
 
   formatPhoneNumber(input) {
-    // Sanitize the input by removing non digits
-    input = input.replace(/[^\d]/g, "");
+    // Sanitize the input by removing non digits and remove country code
+    input = input.replace(/[^\d]/g, "").slice(-10);
 
     // Return per desired format
     return `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
@@ -42,7 +42,7 @@ export default class {
     // Return desired format
     return {
       id,
-      name: [firstName, nickName, lastName].filter((e) => e !== "").join(" "),
+      name: [nickName || firstName, lastName].filter((e) => e !== "").join(" "),
       phones: [primaryPhoneNumber, secondaryPhoneNumber]
         .filter((e) => e !== "")
         .map((e) => this.formatPhoneNumber(e)),
