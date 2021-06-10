@@ -43,14 +43,9 @@ export default class {
     // Setting up regex expression using query
     const regex = new RegExp(query, "i");
 
-    // Mapping over the contactCache to find matches
-    const results = [];
-    this.contactCache.map((contact) => {
-      Object.values(contact).map((val) => {
-        regex.test(val) && results.push(contact);
-      });
-    });
-
-    return results;
+    // Filter contactCache for any matches
+    return this.contactCache.filter((contact) =>
+      Object.values(contact).some((val) => regex.test(val))
+    );
   }
 }
