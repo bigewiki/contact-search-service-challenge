@@ -6,16 +6,14 @@
 
 export default class {
   constructor(updates, service) {
-    // Moving service to a method
-    this.service = service;
+    // initialize the contactCache
+    this.contactCache = [];
 
     // Listening for new contacts and push those to the cache
     updates.on("add", async (id) =>
-      this.contactCache.push(await this.retrieveNewContact(id))
+      this.contactCache.push(await service.getById(id))
     );
   }
-
-  contactCache = [];
 
   formatPhoneNumber(input) {
     // Sanitize the input by removing non digits and remove country code
@@ -25,9 +23,9 @@ export default class {
     return `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
   }
 
-  async retrieveNewContact(id) {
-    // Get raw result from db
+  formatContact(input) {
     const {
+      id,
       firstName,
       nickName,
       lastName,
@@ -37,7 +35,9 @@ export default class {
       addressLine1,
       addressLine2,
       addressLine3,
-    } = await this.service.getById(id);
+    } = input;
+
+    // TODO: we need to add the city, state, zip to the address output
 
     // Return desired format
     return {
@@ -57,9 +57,16 @@ export default class {
     // Setting up regex expression using query
     const regex = new RegExp(query, "i");
 
+    // TODO: only search against name (first, last, nickname), phone number, email, or role
+
     // Filter contactCache for any matches
-    return this.contactCache.filter((contact) =>
-      Object.values(contact).some((val) => regex.test(val))
+    return (
+      this.contactCache
+        .filter((contact) =>
+          Object.values(contact).some((val) => regex.test(val))
+        )
+        // format the output
+        .map((contact) => this.formatContact(contact))
     );
   }
 }
