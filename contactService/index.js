@@ -5,11 +5,43 @@
 // Feel free to add files as necessary
 
 export default class {
-    constructor(updates, service) {
+  constructor(updates, service) {
+    // Moving service to a method
+    this.service = service;
 
-    }
+    // Listening for new contacts and pushing those to the cache
+    updates.on("add", async (id) =>
+      this.contactCache.push(await this.retrieveNewContact(id))
+    );
+  }
 
-    search(query) {
-        return [];
-    }
+  async retrieveNewContact(id) {
+    // Get raw result from db
+    const {
+      firstName,
+      nickName,
+      lastName,
+      primaryEmail,
+      primaryPhoneNumber,
+      secondaryPhoneNumber,
+    } = await this.service.getById(id);
+
+    // Return desired format
+    return {
+      id,
+      name: [firstName, nickName, lastName].filter((e) => e !== "").join(" "),
+      phones: [primaryPhoneNumber, secondaryPhoneNumber].filter(
+        (e) => e !== ""
+      ),
+      email: primaryEmail,
+    };
+  }
+
+  contactCache = [];
+
+  search(query) {
+    console.log(this.contactCache);
+
+    return [];
+  }
 }
