@@ -190,31 +190,39 @@ describe("Contact Service", () => {
       });
     });
 
-    // describe('change event', () => {
-    //     it('should return the updated change to a name', async () => {
-    //         const contact = createContact({ firstName: 'First', lastName: 'Last', primaryPhoneNumber: '314-555-0000' });
+    describe("change event", () => {
+      it("should return the updated change to a name", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          primaryPhoneNumber: "314-555-0000",
+        });
 
-    //         await flush();
-    //         changeContact(contact, { firstName: 'Changed' });
+        await flush();
+        changeContact(contact, { firstName: "Changed" });
 
-    //         expect(service.search('First').length).to.equal(0);
+        expect(service.search("First").length).to.equal(0);
 
-    //         const results = service.search('Changed');
-    //         expect(results.length).to.equal(1);
-    //         expect(results[0].id).to.equal(contact.id);
-    //     });
-    // });
+        const results = service.search("Changed");
+        expect(results.length).to.equal(1);
+        expect(results[0].id).to.equal(contact.id);
+      });
+    });
 
-    // describe('remove event', () => {
-    //     it('should not return removed contacts', async () => {
-    //         const contact = createContact({ firstName: 'First', lastName: 'Last', primaryPhoneNumber: '314-555-0000' });
+    describe("remove event", () => {
+      it("should not return removed contacts", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          primaryPhoneNumber: "314-555-0000",
+        });
 
-    //         await flush();
-    //         removeContact(contact);
+        await flush();
+        removeContact(contact);
 
-    //         expect(service.search('First').length).to.equal(0);
-    //     });
-    // });
+        expect(service.search("First").length).to.equal(0);
+      });
+    });
 
     // describe('searchable fields', () => {
     //     it('should be searchable by phone number', async () => {

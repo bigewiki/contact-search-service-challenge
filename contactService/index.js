@@ -5,6 +5,8 @@
 // Feel free to add files as necessary
 
 export default class {
+  // NOTE: I've over-commented so reviewers can more easily follow the code
+
   constructor(updates, service) {
     // initialize the contactCache
     this.contactCache = [];
@@ -13,6 +15,18 @@ export default class {
     updates.on("add", async (id) =>
       this.contactCache.push(await service.getById(id))
     );
+
+    // Listening for changes and update the cache
+    updates.on("change", (id, key, value) => {
+      const index = this.contactCache.findIndex((contact) => contact.id === id);
+      this.contactCache[index][key] = value;
+    });
+
+    // Listening for removals then splicing those out of the contact cache
+    updates.on("remove", (id) => {
+      const index = this.contactCache.findIndex((contact) => contact.id === id);
+      this.contactCache.splice(index, 1);
+    });
   }
 
   formatPhoneNumber(input) {
@@ -63,12 +77,11 @@ export default class {
     // Setting up regex expression using query
     const regex = new RegExp(query, "i");
 
-    // Filter contactCache for any matches
     return (
       this.contactCache
         .filter((contact) => {
           // Build the search index
-          const index = [
+          const searchIndex = [
             contact.firstName,
             contact.lastName,
             contact.nickName,
@@ -78,7 +91,8 @@ export default class {
             contact.secondaryEmail,
           ];
 
-          return index.some((val) => regex.test(val));
+          // Look for matches
+          return searchIndex.some((val) => regex.test(val));
         })
         // format the output
         .map((contact) => this.formatContact(contact))
