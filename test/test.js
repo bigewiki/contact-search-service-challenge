@@ -83,42 +83,42 @@ describe("Contact Service", () => {
         expect(results[0].id).to.equal(contact.id);
       });
 
-      //   it("should not return a contact before retrieving all the details from the service", async () => {
-      //     const contact = createContact({
-      //       firstName: "First",
-      //       lastName: "Last",
-      //       primaryPhoneNumber: "314-555-0000",
-      //     });
+      it("should not return a contact before retrieving all the details from the service", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          primaryPhoneNumber: "314-555-0000",
+        });
 
-      //     const before = service.search("First");
-      //     await flush();
-      //     const after = service.search("First");
+        const before = service.search("First");
+        await flush();
+        const after = service.search("First");
 
-      //     expect(before.length).to.equal(0);
-      //     expect(after.length).to.equal(1);
-      //     expect(after[0].id).to.equal(contact.id);
-      //   });
+        expect(before.length).to.equal(0);
+        expect(after.length).to.equal(1);
+        expect(after[0].id).to.equal(contact.id);
+      });
 
-      //   it("should map the returned contacts to the expected data format", async () => {
-      //     const contact = createContact({
-      //       firstName: "First",
-      //       lastName: "Last",
-      //       primaryPhoneNumber: "314-555-0000",
-      //       primaryEmail: "first.last@mail.com",
-      //     });
+      it("should map the returned contacts to the expected data format", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          primaryPhoneNumber: "314-555-0000",
+          primaryEmail: "first.last@mail.com",
+        });
 
-      //     await flush();
-      //     const results = service.search("First");
+        await flush();
+        const results = service.search("First");
 
-      //     expect(results.length).to.equal(1);
-      //     expect(results[0]).to.deep.equal({
-      //       name: "First Last",
-      //       phones: ["(314) 555-0000"],
-      //       email: "first.last@mail.com",
-      //       address: "",
-      //       id: contact.id,
-      //     });
-      //   });
+        expect(results.length).to.equal(1);
+        expect(results[0]).to.deep.equal({
+          name: "First Last",
+          phones: ["(314) 555-0000"],
+          email: "first.last@mail.com",
+          address: "",
+          id: contact.id,
+        });
+      });
 
       //   it("should return multiple matching contacts", async () => {
       //     const contact1 = createContact({

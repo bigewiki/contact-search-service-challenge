@@ -15,6 +15,16 @@ export default class {
     );
   }
 
+  contactCache = [];
+
+  formatPhoneNumber(input) {
+    // Sanitize the input by removing non digits
+    input = input.replace(/[^\d]/g, "");
+
+    // Return per desired format
+    return `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
+  }
+
   async retrieveNewContact(id) {
     // Get raw result from db
     const {
@@ -30,14 +40,12 @@ export default class {
     return {
       id,
       name: [firstName, nickName, lastName].filter((e) => e !== "").join(" "),
-      phones: [primaryPhoneNumber, secondaryPhoneNumber].filter(
-        (e) => e !== ""
-      ),
+      phones: [primaryPhoneNumber, secondaryPhoneNumber]
+        .filter((e) => e !== "")
+        .map((e) => this.formatPhoneNumber(e)),
       email: primaryEmail,
     };
   }
-
-  contactCache = [];
 
   search(query) {
     // Setting up regex expression using query
