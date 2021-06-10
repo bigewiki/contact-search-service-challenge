@@ -23,6 +23,19 @@ export default class {
     return `(${input.slice(0, 3)}) ${input.slice(3, 6)}-${input.slice(6, 10)}`;
   }
 
+  formatAddress(input) {
+    const { addressLine1, addressLine2, addressLine3, city, state, zipCode } =
+      input;
+
+    // Combine state/zip for proper address format
+    const stateZip = [state, zipCode].filter((e) => e !== "").join(" ");
+
+    // Filter and format all address components
+    return [addressLine1, addressLine2, addressLine3, city, stateZip]
+      .filter((e) => e !== "")
+      .join(", ");
+  }
+
   formatContact(input) {
     const {
       id,
@@ -32,12 +45,7 @@ export default class {
       primaryEmail,
       primaryPhoneNumber,
       secondaryPhoneNumber,
-      addressLine1,
-      addressLine2,
-      addressLine3,
     } = input;
-
-    // TODO: we need to add the city, state, zip to the address output
 
     // Return desired format
     return {
@@ -47,9 +55,7 @@ export default class {
         .filter((e) => e !== "")
         .map((e) => this.formatPhoneNumber(e)),
       email: primaryEmail,
-      address: [addressLine1, addressLine2, addressLine3]
-        .filter((e) => e !== "")
-        .join(", "),
+      address: this.formatAddress(input),
     };
   }
 
