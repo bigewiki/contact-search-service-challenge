@@ -70,7 +70,6 @@ export default class {
       secondaryPhoneNumber,
     } = input;
 
-    // Return desired format
     return {
       id,
       name: [nickName || firstName, lastName].filter((e) => e !== "").join(" "),
@@ -83,25 +82,35 @@ export default class {
   }
 
   search(query) {
-    // Setting up regex expression using query
-    const regex = new RegExp(query, "i");
+    let regex = new RegExp(query, "i");
 
     return (
       this.contactCache
         .filter((contact) => {
-          // Build the search index
-          const searchIndex = [
-            contact.firstName,
-            contact.lastName,
-            contact.nickName,
-            contact.primaryPhoneNumber,
-            contact.secondaryPhoneNumber,
-            contact.primaryEmail,
-            contact.secondaryEmail,
-          ];
+          // Validate against simple string matches first
+          if (
+            [
+              "firstName",
+              "lastName",
+              "nickName",
+              "primaryEmail",
+              "secondaryEmail",
+            ].some((e) => e !== "" && regex.test(contact[e]))
+          )
+            return true;
 
-          // Look for matches
-          return searchIndex.some((val) => regex.test(val));
+          // Phone number should be sanitized to ignore special characters
+          const sanitized = this.sanitizePhoneNumber(query);
+
+          if (
+            // Verify the query input is a number
+            !isNaN(parseInt(sanitized)) &&
+            // Check the phone numbers against the sanitized query
+            ["primaryPhoneNumber", "secondaryPhoneNumber"].some(
+              (e) => contact[e] !== "" && new RegExp(sanitized).test(contact[e])
+            )
+          )
+            return true;
         })
         // format the output
         .map((contact) => this.formatContact(contact))
