@@ -9,33 +9,32 @@ export default class {
   // NOTE: I've over-commented so reviewers can more easily follow the code
 
   constructor(updates, service) {
-    // initialize the contactCache
-    this.contactCache = [];
-
-    // Listening for new contacts and push those to the cache
+    // Listen for new contacts and push those to the cache
     updates.on("add", async (id) => {
       const res = await service.getById(id);
 
       this.contactCache.push({
         ...res,
-        // Sanitizing phone numbers on contact
+        // Sanitize phone numbers on contact
         primaryPhoneNumber: sanitizePhoneNumber(res.primaryPhoneNumber),
         secondaryPhoneNumber: sanitizePhoneNumber(res.secondaryPhoneNumber),
       });
     });
 
-    // Listening for changes and update the cache
+    // Listen for changes and update the cache
     updates.on("change", (id, key, value) => {
       const index = this.contactCache.findIndex((contact) => contact.id === id);
       this.contactCache[index][key] = value;
     });
 
-    // Listening for removals then splicing those out of the contact cache
+    // Listen for removals then splicing those out of the contact cache
     updates.on("remove", (id) => {
       const index = this.contactCache.findIndex((contact) => contact.id === id);
       this.contactCache.splice(index, 1);
     });
   }
+
+  contactCache = [];
 
   search(query) {
     let regex = new RegExp(query, "i");
@@ -77,7 +76,7 @@ export default class {
           )
             return true;
         })
-        // format the output
+        // Format the output
         .map((contact) => formatContact(contact))
     );
   }
