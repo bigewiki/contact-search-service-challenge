@@ -240,26 +240,26 @@ describe("Contact Service", () => {
         expect(service.search("314655").length).to.equal(0);
       });
 
-      // it("should be searchable by any name variation", async () => {
-      //   const contact = createContact({
-      //     firstName: "First",
-      //     lastName: "Last",
-      //     nickName: "Joey",
-      //     primaryPhoneNumber: "314-555-0000",
-      //   });
+      it("should be searchable by any name variation", async () => {
+        const contact = createContact({
+          firstName: "First",
+          lastName: "Last",
+          nickName: "Joey",
+          primaryPhoneNumber: "314-555-0000",
+        });
 
-      //   await flush();
+        await flush();
 
-      //   expect(service.search("First").length).to.equal(1); // first name
-      //   expect(service.search("irs").length).to.equal(1); // partial first name
-      //   expect(service.search("Last").length).to.equal(1); // last name
-      //   expect(service.search("as").length).to.equal(1); // partial last name
-      //   expect(service.search("Joe").length).to.equal(1); // nick name
-      //   expect(service.search("oe").length).to.equal(1); // partial nick name
-      //   expect(service.search("First Last").length).to.equal(1); // first + last
-      //   expect(service.search("Joey Last").length).to.equal(1); // nick + last
-      //   expect(service.search("Firsty").length).to.equal(0);
-      // });
+        expect(service.search("First").length).to.equal(1); // first name
+        expect(service.search("irs").length).to.equal(1); // partial first name
+        expect(service.search("Last").length).to.equal(1); // last name
+        expect(service.search("as").length).to.equal(1); // partial last name
+        expect(service.search("Joe").length).to.equal(1); // nick name
+        expect(service.search("oe").length).to.equal(1); // partial nick name
+        expect(service.search("First Last").length).to.equal(1); // first + last
+        expect(service.search("Joey Last").length).to.equal(1); // nick + last
+        expect(service.search("Firsty").length).to.equal(0);
+      });
     });
   });
 });

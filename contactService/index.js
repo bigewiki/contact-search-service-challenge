@@ -111,6 +111,15 @@ export default class {
             )
           )
             return true;
+
+          // Check against name combinations
+          if (
+            [
+              `${contact.firstName} ${contact.lastName}`,
+              `${contact.nickName} ${contact.lastName}`,
+            ].some((e) => regex.test(e))
+          )
+            return true;
         })
         // format the output
         .map((contact) => this.formatContact(contact))
